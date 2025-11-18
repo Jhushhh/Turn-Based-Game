@@ -1,11 +1,9 @@
-
-
 abstract class Hero {
-    String name;
-    int hp;
-    int mp;
-    Skill[] skill; 
-    boolean isAlive; 
+    protected String name;
+    protected int hp;
+    protected int mp;
+    protected Skill[] skill; 
+    protected boolean isAlive; 
     
     Hero(String name, int hp, int mp){
         this.name = name;
@@ -17,6 +15,22 @@ abstract class Hero {
     
     public boolean isManaEnough(Skill s){
         return this.mp >= s.manacomp;
+    }
+    
+    public boolean isTank(){
+        return false;
+    }
+    
+    public Skill[] getSkillsArray() {
+        return skill;
+    }
+    
+    public String[] getSkills() {
+        String[] skillNames = new String[3];
+        for (int i = 0; i < 3; i++) {
+            skillNames[i] = skill[i].getSkill_Name();
+        }
+        return skillNames;
     }
     
     public void attack(int skillIndex, Hero target) {
@@ -60,15 +74,19 @@ abstract class Hero {
         target.hp -= damage;
         this.mp += 10; 
     }
+    
     public boolean isAlive(){
         return this.hp > 0;
     }
+    
     public String getName() {
-    return name;
+        return name;
     }
+    
     public int getHp(){
         return hp;
     }
+    
     public int getMp(){
         return mp;
     }

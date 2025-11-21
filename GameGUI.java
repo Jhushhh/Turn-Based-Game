@@ -58,12 +58,14 @@ public class GameGUI extends JFrame {
         JPanel playScreen = createPlayScreen();
         JPanel selectionScreen = createSelectionScreen();
         JPanel battleScreen = createBattleScreen();
+        JPanel gameOverScreen = createGameOverScreen();
 
         gamePanel.add(mainScreen, "MainScreen");
         gamePanel.add(gameModeScreen, "GameMode");
         gamePanel.add(playScreen, "PlayScreen");
         gamePanel.add(selectionScreen, "SelectionScreen");
         gamePanel.add(battleScreen, "BattleScreen");
+        gamePanel.add(gameOverScreen, "GameoverScreen");
 
         add(gamePanel);
         gameCardLayout.show(gamePanel, "MainScreen");
@@ -651,12 +653,18 @@ public class GameGUI extends JFrame {
         if (!playerTeamAlive) {
             battleLogLabel.setText("GAME OVER - Enemy Team Wins!");
             disableAllButtons();
+            Timer gameOverTimer = new Timer(2000, e -> gameCardLayout.show(gamePanel, "GameOverScreen"));
+            gameOverTimer.setRepeats(false);
+            gameOverTimer.start();
             return true;
         }
         
         if (!enemyTeamAlive) {
             battleLogLabel.setText("VICTORY - Player Team Wins!");
             disableAllButtons();
+            Timer gameOverTimer = new Timer(2000, e -> gameCardLayout.show(gamePanel, "GameOverScreen"));
+            gameOverTimer.setRepeats(false);
+            gameOverTimer.start();
             return true;
         }
         
@@ -727,6 +735,58 @@ public class GameGUI extends JFrame {
 
         return panel;
     }
+    private JPanel createGameOverScreen(){
+        ImageBackgroundPanel gameOverScreen = new ImageBackgroundPanel("/assets/castle.png");
+        gameOverScreen.setLayout(new BorderLayout());
+
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+
+        JLabel gameOverLabel = new JLabel("GAME OVER");
+        gameOverLabel.setFont(new Font("Serif", Font.BOLD, 84));
+        gameOverLabel.setForeground(Color.WHITE);
+        gameOverLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameOverLabel.setBorder(BorderFactory.createEmptyBorder(100, 0, 100, 0));
+
+        JPanel menuButtons = new JPanel(new GridLayout(2, 1, 15, 15));
+        menuButtons.setOpaque(false);
+        menuButtons.setBorder(BorderFactory.createEmptyBorder(0, 300, 200, 300));
+
+        JButton playAgainButton = new JButton("Play Again");
+        JButton exitButton = new JButton("Exit");
+
+        JButton[] buttons = { playAgainButton, exitButton };
+        for (JButton b : buttons) {
+            b.setFont(new Font("Serif", Font.BOLD, 32));
+            b.setForeground(Color.WHITE);
+            styleButton(b);
+            menuButtons.add(b);
+        }
+
+        playAgainButton.addActionListener(e -> {
+            resetGame();
+            gameCardLayout.show(gamePanel, "SelectionScreen");
+        });
+        exitButton.addActionListener(e -> System.exit(0));
+
+        centerPanel.add(gameOverLabel, BorderLayout.NORTH);
+        centerPanel.add(menuButtons, BorderLayout.CENTER);
+        gameOverScreen.add(centerPanel, BorderLayout.CENTER);
+
+        return gameOverScreen;
+    }
+
+    private void resetGame() {
+        myTeam = new Hero[3];
+        enemyTeam = new Hero[3];
+        isPlayerTurn = true;
+        count = 0;
+        currentPlayerIndex = 0;
+        isPlayerTeamTurn = true;
+        selectedTarget = null;
+        selectedSkillIndex = -1;
+    }
+    
 
     private void styleButton(JButton b) {
         b.setFocusPainted(false);

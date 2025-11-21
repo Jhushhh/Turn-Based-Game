@@ -19,6 +19,10 @@ class Warrior extends Hero {
         };
     }
 
+    public boolean isTank() {
+        return false;
+    }
+
     public Skill[] getSkillsArray() {
         return skill;
     }

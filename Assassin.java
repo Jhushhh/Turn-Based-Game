@@ -22,4 +22,8 @@ class Assassin extends Hero {
     public Skill[] getSkillsArray() {
         return skill;
     }
+
+    public boolean isTank() {
+        return false;
+    }
 }

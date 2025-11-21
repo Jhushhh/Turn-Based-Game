@@ -11,6 +11,10 @@ class Mage extends Hero {
         };
     }
 
+    public boolean isTank() {
+        return false;
+    }
+
     public String[] getSkill() {
         return new String[] {
                 skill[1].getSkill_Name(),
